@@ -1,18 +1,21 @@
 import java.util.*;
 
-public class JobSchedule {
+public class JobSchedule 
+{
 	private ArrayList<Job> jobs;
-
+	private int completionTime = 0;
 	//Constructor for JobSchdule
 	
-	public JobSchedule() {
+	public JobSchedule() 
+	{
 		jobs = new ArrayList<Job>();
 	}
 
 	
 
 		//Adds a job to the array in job schedule and gives it a time as well
-		public Job addJob(int time) {
+		public Job addJob(int time) 
+		{
 			Job job = new Job();
 			job.time = time;
 			jobs.add(job);
@@ -20,7 +23,8 @@ public class JobSchedule {
 		}
 
 		//getJob just return an index in the order of job added to array in job schedule
-		public Job getJob(int index) {
+		public Job getJob(int index) 
+		{
 			return jobs.get(index);
 		}
 
@@ -29,23 +33,28 @@ public class JobSchedule {
 		 * If job is a vertex with 0 out add to an array
 		 * check the longest time in that array where the job are with vertex out 0
 		 */
-		public int minCompletionTime() {
+		public int minCompletionTime() 
+		{
 			ArrayList<Job> last = new ArrayList<Job>();
-			for (int i = 0; i < jobs.size(); i++) {
-				if (jobs.get(i).cycle) {
+			for (int i = 0; i < jobs.size(); i++) 
+			{
+				if (jobs.get(i).cycle) 
+				{
 					return -1;
 				}
-				if (jobs.get(i).out.isEmpty()) {
+				if (jobs.get(i).out.isEmpty()) 
+				{
 					last.add(jobs.get(i));
 				}
 			}
-			int finalTime = 0;
-			for (int i = 0; i < last.size(); i++) {
-				if (finalTime < last.get(i).startTime + last.get(i).time) {
-					finalTime = last.get(i).startTime + last.get(i).time;
+			for (int i = 0; i < last.size(); i++) 
+			{
+				if (completionTime < last.get(i).startTime + last.get(i).time) 
+				{
+					completionTime = last.get(i).startTime + last.get(i).time;
 				}
 			}
-			return finalTime;
+			return completionTime;
 		}
 		
 		//inner class for Job
@@ -62,15 +71,16 @@ public class JobSchedule {
 		 * added to incoming, outgoing and visit array accordingly 
 		 * calls update method which updates times
 		 */
-		public void requires(Job j) {
-			if (j.startTime + j.time > startTime || in.isEmpty()) {
+		public void requires(Job j) 
+		{
+			if (j.startTime + j.time > startTime || in.isEmpty()) 
+			{
 				startTime = j.time + j.startTime;
 			}
 			in.add(j);
 			j.out.add(this);
 			v.add(this);
 			update(this);
-			v.removeAll(v);
 		}
 
 		/*
@@ -80,12 +90,16 @@ public class JobSchedule {
 		 * adds all outgoing edges to v arraylist and updates times to each vertex, calls till last vertex
 		 */
 		public void update(Job current) {
-			if (current.out.isEmpty()) {
+			if (current.out.isEmpty()) 
+			{
 				return;
-			} else {
-				for (int i = 0; i < current.out.size(); i++) {
-					if (sameJob(current.out.get(i))) {
-						startTime = -1;
+			} 
+			else 
+			{
+				for (int i = 0; i < current.out.size(); i++) 
+				{
+					if (sameJob(current.out.get(i))) 
+					{
 						current.startTime = -1;
 						cycle = true;
 						return;
@@ -101,8 +115,10 @@ public class JobSchedule {
 		 
 
 		public boolean sameJob(Job j) {
-			for (int i = 0; i < v.size(); i++) {
-				if (v.get(i).equals(j)) {
+			for (int i = 0; i < v.size(); i++) 
+			{
+				if (v.get(i).equals(j)) 
+				{
 					return true;
 				}
 			}
@@ -110,7 +126,8 @@ public class JobSchedule {
 		}
 		//returns start time
 		
-		public int getStartTime() {
+		public int getStartTime() 
+		{
 			return startTime;
 		}
 	}
