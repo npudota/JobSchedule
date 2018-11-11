@@ -59,13 +59,12 @@ public class JobSchedule
 		
 		//inner class for Job
 		class Job {
-
 			private ArrayList<Job> in = new ArrayList<Job>();
 			private ArrayList<Job> out = new ArrayList<Job>();
-			private ArrayList<Job> v = new ArrayList<Job>();
 			private int time;
 			private boolean cycle = false;
 			private int startTime = 0;
+			private ArrayList<Job> v = new ArrayList<Job>();
 		/*
 		 * determines a pre-req to job. fixes time at start time
 		 * added to incoming, outgoing and visit array accordingly 
@@ -83,6 +82,22 @@ public class JobSchedule
 			update(this);
 		}
 
+		//returns startTime
+		public int getStartTime() 
+		{
+			return startTime;
+		}
+		//checks if there is a cycle
+		 public boolean isCycle(Job j) {
+			for (int i = 0; i < v.size(); i++) 
+			{
+				if (v.get(i).equals(j)) 
+				{
+					return true;
+				}
+			}
+			return false;
+		}
 		/*
 		 * update times of current jobs when called on by requires
 		 * if no outs then no need to update, because its last
@@ -98,7 +113,7 @@ public class JobSchedule
 			{
 				for (int i = 0; i < current.out.size(); i++) 
 				{
-					if (sameJob(current.out.get(i))) 
+					if (isCycle(current.out.get(i))) 
 					{
 						current.startTime = -1;
 						cycle = true;
@@ -110,25 +125,6 @@ public class JobSchedule
 				}
 			}
 		}
-		
-		 //checks if there is a cycle
-		 
-
-		public boolean sameJob(Job j) {
-			for (int i = 0; i < v.size(); i++) 
-			{
-				if (v.get(i).equals(j)) 
-				{
-					return true;
-				}
-			}
-			return false;
-		}
-		//returns start time
-		
-		public int getStartTime() 
-		{
-			return startTime;
-		}
+	
 	}
 }
